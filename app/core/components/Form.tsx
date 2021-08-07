@@ -2,6 +2,7 @@ import { useState, ReactNode, PropsWithoutRef } from "react"
 import { Formik, FormikProps } from "formik"
 import { validateZodSchema } from "blitz"
 import { z } from "zod"
+import { Grid, makeStyles } from "@material-ui/core"
 
 export interface FormProps<S extends z.ZodType<any, any>>
   extends Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit"> {
@@ -19,6 +20,24 @@ interface OnSubmitResult {
   [prop: string]: any
 }
 
+const useStyles = makeStyles((theme) => ({
+  formButton: {
+    fontWeight: "bold",
+    fontSize: "20px",
+    padding: "10px",
+    width: "100%",
+    border: "none",
+    borderRadius: "50px",
+    cursor: "pointer",
+  },
+  success: {
+    background: theme.palette.primary.dark,
+  },
+  cancel: {
+    background: theme.palette.primary.light,
+  },
+}))
+
 export const FORM_ERROR = "FORM_ERROR"
 
 export function Form<S extends z.ZodType<any, any>>({
@@ -27,8 +46,10 @@ export function Form<S extends z.ZodType<any, any>>({
   schema,
   initialValues,
   onSubmit,
+  additionalContent,
   ...props
 }: FormProps<S>) {
+  const classes = useStyles()
   const [formError, setFormError] = useState<string | null>(null)
   return (
     <Formik
@@ -50,19 +71,23 @@ export function Form<S extends z.ZodType<any, any>>({
         <form onSubmit={handleSubmit} className="form" {...props}>
           {/* Form fields supplied as children are rendered here */}
           {children}
-
-          {formError && (
-            <div role="alert" style={{ color: "red" }}>
-              {formError}
-            </div>
-          )}
-
-          {submitText && (
-            <button type="submit" disabled={isSubmitting}>
-              {submitText}
-            </button>
-          )}
-
+          <Grid container>
+            {formError && (
+              <div role="alert" style={{ color: "red" }}>
+                {formError}
+              </div>
+            )}
+          </Grid>
+          <Grid container justify="center" spacing={2}>
+            <Grid item xs={6}>
+              <button className={`${classes.formButton} ${classes.success}`} type="submit">
+                確認
+              </button>
+            </Grid>
+            <Grid item xs={6}>
+              <button className={`${classes.formButton} ${classes.cancel}`}>取消</button>
+            </Grid>
+          </Grid>
           <style global jsx>{`
             .form > * + * {
               margin-top: 1rem;

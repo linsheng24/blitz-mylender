@@ -3,17 +3,44 @@ import { LabeledTextField } from "app/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/core/components/Form"
 import login from "app/auth/mutations/login"
 import { Login } from "app/auth/validations"
+import { Grid, makeStyles, Paper } from "@material-ui/core"
 
 type LoginFormProps = {
   onSuccess?: () => void
 }
 
+const useStyles = makeStyles((theme) => ({
+  loginForm: {
+    position: "fixed",
+    paddingLeft: "80px",
+    paddingRight: "80px",
+    paddingBottom: "40px",
+    width: "600px",
+    marginLeft: "-300px",
+    marginTop: "-250px",
+    top: "50%",
+    left: "50%",
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      marginLeft: "-50%",
+      marginTop: "-200px",
+    },
+  },
+  formField: {
+    width: "100%",
+    height: "50px",
+  },
+}))
+
 export const LoginForm = (props: LoginFormProps) => {
+  const classes = useStyles()
   const [loginMutation] = useMutation(login)
 
   return (
-    <div>
-      <h1>Login</h1>
+    <Paper className={classes.loginForm}>
+      <Grid container justify="center">
+        <h1>登入</h1>
+      </Grid>
 
       <Form
         submitText="Login"
@@ -25,29 +52,36 @@ export const LoginForm = (props: LoginFormProps) => {
             props.onSuccess?.()
           } catch (error) {
             if (error instanceof AuthenticationError) {
-              return { [FORM_ERROR]: "Sorry, those credentials are invalid" }
+              return { [FORM_ERROR]: "帳號密碼錯誤" }
             } else {
               return {
-                [FORM_ERROR]:
-                  "Sorry, we had an unexpected error. Please try again. - " + error.toString(),
+                [FORM_ERROR]: "抱歉，發生未預期錯誤，請稍後再試。" + error.toString(),
               }
             }
           }
         }}
       >
-        <LabeledTextField name="email" label="Email" placeholder="Email" />
-        <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
+        <LabeledTextField
+          className={classes.formField}
+          name="email"
+          label="電子信箱"
+          placeholder="Email"
+        />
+        <LabeledTextField
+          className={classes.formField}
+          name="password"
+          label="密碼"
+          placeholder="Password"
+          type="password"
+        />
         <div>
           <Link href={Routes.ForgotPasswordPage()}>
-            <a>Forgot your password?</a>
-          </Link>
+            <a>忘記密碼?</a>
+          </Link>{" "}
+          <Link href={Routes.SignupPage()}>註冊</Link>
         </div>
       </Form>
-
-      <div style={{ marginTop: "1rem" }}>
-        Or <Link href={Routes.SignupPage()}>Sign Up</Link>
-      </div>
-    </div>
+    </Paper>
   )
 }
 

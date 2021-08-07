@@ -12,7 +12,7 @@ import LoginForm from "app/auth/components/LoginForm"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import { ThemeProvider, createTheme } from "@material-ui/core/styles"
 import React from "react"
-import { green, purple } from "@material-ui/core/colors"
+import { purple } from "@material-ui/core/colors"
 
 //You can customize this as you want and even move it out to a separate file
 const theme = createTheme({
