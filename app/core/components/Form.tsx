@@ -46,7 +46,6 @@ export function Form<S extends z.ZodType<any, any>>({
   schema,
   initialValues,
   onSubmit,
-  additionalContent,
   ...props
 }: FormProps<S>) {
   const classes = useStyles()
