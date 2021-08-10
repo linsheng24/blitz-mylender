@@ -1,9 +1,14 @@
 import React, { ReactNode, useState } from "react"
-import { Head, Image, Routes, Link } from "blitz"
-import { Fade, Grid, makeStyles, Menu, MenuItem } from "@material-ui/core"
+import { Head, Image, Routes, Link, useMutation } from "blitz"
+import { Backdrop, Fade, Grid, makeStyles, Menu, MenuItem } from "@material-ui/core"
 import PersonIcon from "@material-ui/icons/Person"
 import styled from "styled-components"
 import LoginForm from "app/auth/components/LoginForm"
+import logout from "../../auth/mutations/logout"
+import { useCurrentUser } from "../hooks/useCurrentUser"
+import { useRecoilValue, useSetRecoilState } from "recoil"
+import { ShowLoginForm, ShowSignupForm } from "../atoms/common"
+import SignupForm from "../../auth/components/SignupForm"
 
 type LayoutProps = {
   title?: string
@@ -44,7 +49,14 @@ const LoginLink = styled(StyledLink)`
 
 const Layout = ({ title, children }: LayoutProps) => {
   const classes = useStyles()
-  const [isLogin, setIsLogin] = useState(true)
+  // const [showLoginForm, setShowLoginForm] = useState(false)
+  const showLoginForm = useRecoilValue(ShowLoginForm)
+  const setShowLoginForm = useSetRecoilState(ShowLoginForm)
+  const showSignupForm = useRecoilValue(ShowSignupForm)
+  const setShowSignupForm = useSetRecoilState(ShowSignupForm)
+
+  const currentUser = useCurrentUser()
+  const [logoutMutation] = useMutation(logout)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -52,7 +64,6 @@ const Layout = ({ title, children }: LayoutProps) => {
   }
   const handleClose = () => {
     setAnchorEl(null)
-    setIsLogin(false)
   }
 
   return (
@@ -78,7 +89,7 @@ const Layout = ({ title, children }: LayoutProps) => {
             <Link href={Routes.Home()} passHref>
               <StyledLink>查看產品</StyledLink>
             </Link>
-            {isLogin ? (
+            {currentUser ? (
               <a
                 className={classes.personIcon}
                 aria-controls="fade-menu"
@@ -88,7 +99,7 @@ const Layout = ({ title, children }: LayoutProps) => {
                 <PersonIcon />
               </a>
             ) : (
-              <LoginLink onClick={() => setIsLogin(true)}>登入</LoginLink>
+              <LoginLink onClick={() => setShowLoginForm(true)}>登入</LoginLink>
             )}
           </Grid>
         </Grid>
@@ -112,10 +123,19 @@ const Layout = ({ title, children }: LayoutProps) => {
       >
         <MenuItem onClick={handleClose}>個人帳務</MenuItem>
         <MenuItem onClick={handleClose}>設定</MenuItem>
-        <MenuItem onClick={handleClose}>登出</MenuItem>
+        <MenuItem
+          onClick={async () => {
+            await logoutMutation()
+            handleClose()
+          }}
+        >
+          登出
+        </MenuItem>
       </Menu>
       {children}
-      <LoginForm />
+      <Backdrop open={showLoginForm}>
+        {showLoginForm && (showSignupForm ? <SignupForm /> : <LoginForm />)}
+      </Backdrop>
     </>
   )
 }

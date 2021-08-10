@@ -4,6 +4,8 @@ import { Form, FORM_ERROR } from "app/core/components/Form"
 import login from "app/auth/mutations/login"
 import { Login } from "app/auth/validations"
 import { Grid, makeStyles, Paper } from "@material-ui/core"
+import { useSetRecoilState } from "recoil"
+import { ShowLoginForm, ShowSignupForm } from "../../core/atoms/common"
 
 type LoginFormProps = {
   onSuccess?: () => void
@@ -21,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
     top: "50%",
     left: "50%",
     [theme.breakpoints.down("sm")]: {
-      width: "100%",
-      marginLeft: "-50%",
+      width: "80%",
+      marginLeft: "-40%",
       marginTop: "-200px",
     },
   },
@@ -35,21 +37,29 @@ const useStyles = makeStyles((theme) => ({
 export const LoginForm = (props: LoginFormProps) => {
   const classes = useStyles()
   const [loginMutation] = useMutation(login)
-
+  const setShowLoginForm = useSetRecoilState(ShowLoginForm)
+  const setShowSignupForm = useSetRecoilState(ShowSignupForm)
+  const cancelHandler = () => {
+    setShowLoginForm(false)
+  }
+  const successHandler = () => {
+    setShowLoginForm(false)
+  }
   return (
     <Paper className={classes.loginForm}>
       <Grid container justify="center">
         <h1>登入</h1>
       </Grid>
-
       <Form
         submitText="Login"
         schema={Login}
         initialValues={{ email: "", password: "" }}
+        onCancel={cancelHandler}
         onSubmit={async (values) => {
           try {
             await loginMutation(values)
             props.onSuccess?.()
+            successHandler()
           } catch (error) {
             if (error instanceof AuthenticationError) {
               return { [FORM_ERROR]: "帳號密碼錯誤" }
@@ -78,7 +88,9 @@ export const LoginForm = (props: LoginFormProps) => {
           <Link href={Routes.ForgotPasswordPage()}>
             <a>忘記密碼?</a>
           </Link>{" "}
-          <Link href={Routes.SignupPage()}>註冊</Link>
+          <Link href={Routes.Home()}>
+            <a onClick={() => setShowSignupForm(true)}>註冊</a>
+          </Link>
         </div>
       </Form>
     </Paper>

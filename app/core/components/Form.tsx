@@ -12,6 +12,7 @@ export interface FormProps<S extends z.ZodType<any, any>>
   submitText?: string
   schema?: S
   onSubmit: (values: z.infer<S>) => Promise<void | OnSubmitResult>
+  onCancel?
   initialValues?: FormikProps<z.infer<S>>["initialValues"]
 }
 
@@ -46,6 +47,7 @@ export function Form<S extends z.ZodType<any, any>>({
   schema,
   initialValues,
   onSubmit,
+  onCancel,
   ...props
 }: FormProps<S>) {
   const classes = useStyles()
@@ -84,7 +86,13 @@ export function Form<S extends z.ZodType<any, any>>({
               </button>
             </Grid>
             <Grid item xs={6}>
-              <button className={`${classes.formButton} ${classes.cancel}`}>取消</button>
+              <button
+                className={`${classes.formButton} ${classes.cancel}`}
+                onClick={onCancel}
+                type="button"
+              >
+                取消
+              </button>
             </Grid>
           </Grid>
           <style global jsx>{`

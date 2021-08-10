@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import {
   AppProps,
   ErrorBoundary,
@@ -13,8 +14,8 @@ import CssBaseline from "@material-ui/core/CssBaseline"
 import { ThemeProvider, createTheme } from "@material-ui/core/styles"
 import React from "react"
 import { purple } from "@material-ui/core/colors"
+import { RecoilRoot } from "recoil"
 
-//You can customize this as you want and even move it out to a separate file
 const theme = createTheme({
   palette: {
     primary: {
@@ -36,7 +37,9 @@ export default function App({ Component, pageProps }: AppProps) {
         FallbackComponent={RootErrorFallback}
         onReset={useQueryErrorResetBoundary().reset}
       >
-        {getLayout(<Component {...pageProps} />)}
+        <RecoilRoot>
+          <Suspense fallback="Loading...">{getLayout(<Component {...pageProps} />)}</Suspense>
+        </RecoilRoot>
       </ErrorBoundary>
     </ThemeProvider>
   )
