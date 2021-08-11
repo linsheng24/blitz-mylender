@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     marginLeft: "auto",
   },
+  backdrop: {
+    zIndex: 100,
+  },
 }))
 
 const StyledLink = styled.a`
@@ -49,7 +52,6 @@ const LoginLink = styled(StyledLink)`
 
 const Layout = ({ title, children }: LayoutProps) => {
   const classes = useStyles()
-  // const [showLoginForm, setShowLoginForm] = useState(false)
   const showLoginForm = useRecoilValue(ShowLoginForm)
   const setShowLoginForm = useSetRecoilState(ShowLoginForm)
   const showSignupForm = useRecoilValue(ShowSignupForm)
@@ -133,7 +135,7 @@ const Layout = ({ title, children }: LayoutProps) => {
         </MenuItem>
       </Menu>
       {children}
-      <Backdrop open={showLoginForm}>
+      <Backdrop open={showLoginForm} className={classes.backdrop}>
         {showLoginForm && (showSignupForm ? <SignupForm /> : <LoginForm />)}
       </Backdrop>
     </>

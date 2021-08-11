@@ -1,62 +1,119 @@
-import { Suspense } from "react"
-import { Link, BlitzPage, useMutation, Routes } from "blitz"
+import { BlitzPage } from "blitz"
 import Layout from "app/core/layouts/Layout"
-import { useCurrentUser } from "app/core/hooks/useCurrentUser"
-import logout from "app/auth/mutations/logout"
+import Carousel from "react-material-ui-carousel"
+import { Button, Grid, Hidden, makeStyles, Paper } from "@material-ui/core"
+import React from "react"
 
-/*
- * This file is just for a pleasant getting started page for your new app.
- * You can delete everything in here and start from scratch if you like.
- */
-
-const UserInfo = () => {
-  // const currentUser = useCurrentUser()
-  // const [logoutMutation] = useMutation(logout)
-  // if (currentUser) {
-  //   return (
-  //     <>
-  //       <button
-  //         className="button small"
-  //         onClick={async () => {
-  //           await logoutMutation()
-  //         }}
-  //       >
-  //         Logout
-  //       </button>
-  //       <div>
-  //         User id: <code>{currentUser.id}</code>
-  //         <br />
-  //         User role: <code>{currentUser.role}</code>
-  //       </div>
-  //     </>
-  //   )
-  // } else {
-  //   return (
-  //     <>
-  //       <Link href={Routes.SignupPage()}>
-  //         <a className="button small">
-  //           <strong>Sign Up</strong>
-  //         </a>
-  //       </Link>
-  //       <Link href={Routes.LoginPage()}>
-  //         <a className="button small">
-  //           <strong>Login</strong>
-  //         </a>
-  //       </Link>
-  //     </>
-  //   )
-  // }
-}
+const useStyles = makeStyles((theme) => ({
+  root: {
+    zIndex: -1,
+  },
+  carouselContainer: {
+    marginTop: "60px",
+  },
+  item: {
+    position: "relative",
+    height: "350px",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+    cursor: "pointer",
+    borderLeft: "1px solid #fafafa",
+    borderRight: "1px solid #fafafa",
+    "&:hover": {
+      opacity: "0.5",
+    },
+    "& h2": {
+      width: "100%",
+      position: "absolute",
+      bottom: "0px",
+      textAlign: "center",
+      color: "white",
+      backgroundColor: "black",
+      opacity: "0.6",
+      padding: "8px 0 8px",
+      margin: "0",
+    },
+  },
+}))
 
 const Home: BlitzPage = () => {
+  const classes = useStyles()
+  let items = [
+    [
+      { url: "/sample.jpg", text: "樂器文具" },
+      { url: "/sample.jpg", text: "樂器文具" },
+      { url: "/sample.jpg", text: "樂器文具" },
+    ],
+    [
+      { url: "/sample.jpg", text: "樂器文具" },
+      { url: "/sample.jpg", text: "樂器文具" },
+      { url: "/sample.jpg", text: "樂器文具" },
+    ],
+    [
+      { url: "/sample.jpg", text: "樂器文具" },
+      { url: "/sample.jpg", text: "樂器文具" },
+      { url: "/sample.jpg", text: "樂器文具" },
+    ],
+  ]
   return (
-    <div>
-      <h1>Hello, world!</h1>
-
-      {/*<Suspense fallback="Loading...">*/}
-      {/*  <UserInfo />*/}
-      {/*</Suspense>*/}
+    <div className={classes.root}>
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        className={classes.carouselContainer}
+      >
+        <Grid xs={12} sm={10}>
+          <Carousel interval={8000} indicators={false}>
+            {items.map((item, i) => (
+              <Item key={i} item={item} />
+            ))}
+          </Carousel>
+        </Grid>
+      </Grid>
     </div>
+  )
+}
+
+function Item(props) {
+  const classes = useStyles()
+  return (
+    <Grid container direction="row" justify="center" alignItems="center">
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={4}
+        className={classes.item}
+        style={{ backgroundImage: `url(${props.item[0].url})` }}
+      >
+        <h2>{props.item[0].text}</h2>
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={4}
+        className={classes.item}
+        style={{ backgroundImage: `url(${props.item[1].url})` }}
+      >
+        <h2>{props.item[1].text}</h2>
+      </Grid>
+      <Hidden only={["sm"]}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          className={classes.item}
+          style={{ backgroundImage: `url(${props.item[2].url})` }}
+        >
+          <h2>{props.item[2].text}</h2>
+        </Grid>
+      </Hidden>
+    </Grid>
   )
 }
 
