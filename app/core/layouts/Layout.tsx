@@ -9,6 +9,9 @@ import { useCurrentUser } from "../hooks/useCurrentUser"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import { ShowLoginForm, ShowSignupForm } from "../atoms/common"
 import SignupForm from "../../auth/components/SignupForm"
+import FacebookIcon from "@material-ui/icons/Facebook"
+import InstagramIcon from "@material-ui/icons/Instagram"
+import MailOutlineIcon from "@material-ui/icons/MailOutline"
 
 type LayoutProps = {
   title?: string
@@ -18,6 +21,31 @@ type LayoutProps = {
 const useStyles = makeStyles((theme) => ({
   navbar: {
     backgroundColor: theme.palette.primary.light,
+  },
+  footer: {
+    backgroundColor: theme.palette.primary.dark,
+    height: "300px",
+  },
+  contactBlock: {
+    fontSize: "15px",
+    paddingBottom: "15px",
+    "& span": {
+      fontWeight: "bold",
+    },
+    "& a": {
+      color: "black",
+      textDecoration: "none",
+    },
+  },
+  aboutBlock: {
+    fontSize: "15px",
+    paddingBottom: "15px",
+    "& a": {
+      fontWeight: "bold",
+      color: "black",
+      display: "block",
+      textDecoration: "none",
+    },
   },
   logo: {
     display: "flex",
@@ -55,7 +83,6 @@ const Layout = ({ title, children }: LayoutProps) => {
   const showLoginForm = useRecoilValue(ShowLoginForm)
   const setShowLoginForm = useSetRecoilState(ShowLoginForm)
   const showSignupForm = useRecoilValue(ShowSignupForm)
-  const setShowSignupForm = useSetRecoilState(ShowSignupForm)
 
   const currentUser = useCurrentUser()
   const [logoutMutation] = useMutation(logout)
@@ -138,6 +165,41 @@ const Layout = ({ title, children }: LayoutProps) => {
       <Backdrop open={showLoginForm} className={classes.backdrop}>
         {showLoginForm && (showSignupForm ? <SignupForm /> : <LoginForm />)}
       </Backdrop>
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        className={classes.footer}
+      >
+        <Grid container item xs={10} sm={8}>
+          <Grid xs={12} sm={6}>
+            <h2>Contact</h2>
+            <Grid className={classes.contactBlock}>
+              <span>EMAIL:</span> <span>linsheng@gmail.com</span>
+            </Grid>
+            <Grid className={classes.contactBlock}>
+              <a href="#">
+                <FacebookIcon fontSize="large" />
+              </a>
+              <a href="#">
+                <InstagramIcon fontSize="large" />
+              </a>
+              <a href="#">
+                <MailOutlineIcon fontSize="large" />
+              </a>
+            </Grid>
+          </Grid>
+          <Grid xs={12} sm={6}>
+            <h2>About</h2>
+            <Grid className={classes.aboutBlock}>
+              <Link href={"#"}>服務契約</Link>
+              <Link href={"#"}>隱私權政策</Link>
+            </Grid>
+            <Grid className={classes.aboutBlock}>MyLender © All Rights Reserved.</Grid>
+          </Grid>
+        </Grid>
+      </Grid>
     </>
   )
 }

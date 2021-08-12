@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
   },
   carouselContainer: {
     marginTop: "60px",
+    marginBottom: "60px",
   },
   item: {
     position: "relative",
