@@ -24,7 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
   footer: {
     backgroundColor: theme.palette.primary.dark,
-    height: "300px",
+    paddingTop: "50px",
+    paddingBottom: "50px",
+    textAlign: "center",
   },
   contactBlock: {
     fontSize: "15px",

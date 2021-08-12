@@ -1,8 +1,9 @@
 import { BlitzPage } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import Carousel from "react-material-ui-carousel"
-import { Button, Grid, Hidden, makeStyles, Paper } from "@material-ui/core"
+import { Divider, Grid, Hidden, makeStyles } from "@material-ui/core"
 import React from "react"
+import { Selector } from "../core/components/selector"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,6 +75,8 @@ const Home: BlitzPage = () => {
           </Carousel>
         </Grid>
       </Grid>
+      <Divider variant="middle" />
+      <Selector />
     </div>
   )
 }
