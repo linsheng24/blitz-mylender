@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.dark,
     paddingTop: "50px",
     paddingBottom: "50px",
+    marginTop: "50px",
     textAlign: "center",
   },
   contactBlock: {

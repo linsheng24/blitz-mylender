@@ -3,7 +3,8 @@ import Layout from "app/core/layouts/Layout"
 import Carousel from "react-material-ui-carousel"
 import { Divider, Grid, Hidden, makeStyles } from "@material-ui/core"
 import React from "react"
-import { Selector } from "../core/components/selector"
+import { Selector } from "../core/components/Selector"
+import { ItemList } from "../core/components/ItemList"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     borderRight: "1px solid #fafafa",
     "&:hover": {
       opacity: "0.5",
+      transitionDuration: "0.2s",
     },
     "& h2": {
       width: "100%",
@@ -36,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
       padding: "8px 0 8px",
       margin: "0",
     },
+  },
+  selectorBlock: {
+    minHeight: "200px",
+    display: "flex",
+    alignItems: "center",
   },
 }))
 
@@ -76,7 +83,14 @@ const Home: BlitzPage = () => {
         </Grid>
       </Grid>
       <Divider variant="middle" />
-      <Selector />
+      <Grid container direction="row" justify="center" alignItems="center">
+        <Grid item className={classes.selectorBlock} xs={12}>
+          <Selector />
+        </Grid>
+        <Grid item className={classes.selectorBlock} xs={12} sm={10}>
+          <ItemList />
+        </Grid>
+      </Grid>
     </div>
   )
 }

@@ -1,22 +1,26 @@
 import {
+  Button,
   Chip,
   createStyles,
   FormControl,
   FormHelperText,
+  Grid,
   Input,
   InputLabel,
   makeStyles,
   MenuItem,
   Select,
+  TextField,
   Theme,
 } from "@material-ui/core"
-import { useState } from "react"
+import React, { useState } from "react"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     formControl: {
       margin: theme.spacing(1),
-      minWidth: 120,
+      maxWidth: "200px",
+      minWidth: "100px",
     },
     selectEmpty: {
       marginTop: theme.spacing(2),
@@ -56,48 +60,44 @@ export function Selector() {
   }
   return (
     <>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-simple-select-helper-label">Age</InputLabel>
-        <Select
-          labelId="demo-simple-select-helper-label"
-          id="demo-simple-select-helper"
-          // value={age}
-          // onChange={handleChange}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl>
-
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-mutiple-name-label">Name</InputLabel>
-        <Select
-          labelId="demo-mutiple-name-label"
-          id="demo-mutiple-name"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<Input />}
-          renderValue={(selected) => (
-            <div>
-              {(selected as string[]).map((value) => (
-                <Chip key={value} label={value} />
-              ))}
-            </div>
-          )}
-          MenuProps={MenuProps}
-        >
-          {names.map((name) => (
-            <MenuItem key={name} value={name}>
-              {name}
+      <Grid container direction="row" justify="center" alignItems="center">
+        <FormControl className={classes.formControl}>
+          <InputLabel id="demo-simple-select-helper-label">Age</InputLabel>
+          <Select>
+            <MenuItem value="">
+              <em>None</em>
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <InputLabel>Name</InputLabel>
+          <Select
+            multiple
+            value={personName}
+            onChange={handleChange}
+            input={<Input />}
+            renderValue={(selected) => (selected as string[]).join(", ")}
+            MenuProps={MenuProps}
+          >
+            {names.map((name) => (
+              <MenuItem key={name} value={name}>
+                {name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <TextField id="standard-basic" label="Standard" />
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <Button variant="outlined" color="primary">
+            搜尋
+          </Button>
+        </FormControl>
+      </Grid>
     </>
   )
 }
